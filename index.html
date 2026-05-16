@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>fin.blog // trespass.log</title>
+  <meta name="description" content="fin.blog — security writeups and personal journal entries from a freelance netrunner." />
+  <meta name="color-scheme" content="dark" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <aside id="sidebar" class="sidebar">
+      <button id="sidebar-close" class="sidebar__close" aria-label="close menu">&times;</button>
+      <button id="sidebar-collapse" class="sidebar__collapse" aria-label="collapse sidebar" title="Collapse  [">&laquo;</button>
+      <div class="sidebar__top">
+
+        <div class="ident">
+          <div class="ident__mark">
+            <span class="ident__mark-brand">FIN</span>
+            <span class="ident__mark-dot">.</span>
+            <span class="ident__mark-tld">BLOG</span>
+          </div>
+          <div class="ident__tag">
+            <span style="color:var(--magenta)">&gt;</span> trespass.log
+            <span class="caret">_</span>
+          </div>
+          <div class="ident__meta">
+            <div><span class="dim">USER</span><span>fin</span></div>
+            <div><span class="dim">ROLE</span><span>netrunner / freelance</span></div>
+            <div><span class="dim">LOC</span><span>NC // off-grid</span></div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <div class="section-label">
+            <span class="section-label__slash">//</span>
+            <span class="section-label__text">NAVIGATION</span>
+            <span class="section-label__line"></span>
+          </div>
+          <ul id="nav-list" class="nav__list"></ul>
+        </nav>
+
+      </div>
+
+      <div class="sysfoot">
+        <div class="section-label">
+          <span class="section-label__slash">//</span>
+          <span class="section-label__text">SYSTEM</span>
+          <span class="section-label__line"></span>
+        </div>
+        <div class="sysfoot__rows">
+          <div><span class="dim">TIME</span><span class="mono" id="clock">--:--:--</span></div>
+          <div>
+            <span class="dim">UPLINK</span>
+            <span class="status-pill status-pill--ok"><span class="status-pill__dot"></span>SECURE</span>
+          </div>
+          <div><span class="dim">DAEMON</span><span class="mono">blackwall.v7</span></div>
+        </div>
+        <div class="sysfoot__legal">&copy; 2077 // NO RIGHTS RESERVED</div>
+      </div>
+    </aside>
+
+    <div class="app__scrim" id="scrim"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="topbar__menu" id="menu-btn" aria-label="open menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="topbar__crumb">
+          <span class="dim">//</span>
+          <span>fin.blog</span>
+          <span class="dim">/</span>
+          <span id="crumb" style="color:var(--yellow)">all_posts</span>
+        </div>
+        <div class="topbar__center">
+          <span class="dim mono">QUERY:</span>
+          <input id="query" class="topbar__input mono" placeholder="grep ./posts/*" spellcheck="false" autocomplete="off" />
+        </div>
+        <div class="topbar__right">
+          <button id="focus-toggle" class="topbar__toggle" title="Hide post list  ]">
+            <span class="topbar__toggle-icon" id="focus-toggle-icon">&#x2715;</span>
+            <span class="topbar__toggle-label" id="focus-toggle-label">FOCUS</span>
+          </button>
+          <span class="topbar__sep"></span>
+          <span class="dim mono">RESULTS</span>
+          <span class="mono" id="result-count" style="color:var(--yellow)">00</span>
+          <span class="topbar__sep topbar__sep--narrow"></span>
+          <span class="status-pill status-pill--ok"><span class="status-pill__dot"></span>ONLINE</span>
+        </div>
+      </header>
+
+      <div class="workspace" id="workspace">
+        <section class="list">
+          <div class="section-label">
+            <span class="section-label__slash">//</span>
+            <span class="section-label__text">TRANSMISSIONS</span>
+            <span id="list-count" class="section-label__count">[0]</span>
+            <span class="section-label__line"></span>
+            <span id="list-accent" class="section-label__accent">LIVE</span>
+          </div>
+          <div id="list-scroll" class="list__scroll"></div>
+          <div id="list-empty" class="list__empty mono" hidden>
+            <span style="color:var(--magenta)">// NO_MATCH</span>
+            <div class="dim" style="margin-top:8px">adjust query or clear filters</div>
+          </div>
+        </section>
+
+        <div id="splitter" class="splitter" role="separator" aria-label="resize post list" title="Drag to resize  ·  double-click to reset">
+          <span class="splitter__grip"></span>
+        </div>
+
+        <div id="reader-mount"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@13.0.3/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
