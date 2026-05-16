@@ -473,6 +473,7 @@ input  { font-family: inherit; color: inherit; background: none; border: none; o
 .list__scroll::-webkit-scrollbar-track { background: transparent; }
 .list__scroll::-webkit-scrollbar-thumb { background: var(--line-strong); }
 .list__scroll::-webkit-scrollbar-thumb:hover { background: var(--yellow-dim); }
+.list__scroll[hidden], .list__empty[hidden] { display: none; }
 
 .list__empty {
   flex: 1;
@@ -489,6 +490,7 @@ input  { font-family: inherit; color: inherit; background: none; border: none; o
   position: relative;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: 8px;
   padding: 14px 16px 14px;
   background: var(--bg-panel);
