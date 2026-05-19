@@ -25,6 +25,11 @@ The `.nojekyll` file in the root keeps Pages from preprocessing.
 
 ## Add a post
 
+Full authoring guide — frontmatter schema, section style, mermaid usage,
+voice, checklist — lives at
+[`.claude/skills/fin-blog-post/SKILL.md`](.claude/skills/fin-blog-post/SKILL.md).
+Quick version:
+
 1. Create `posts/<id>-<slug>.md` with YAML frontmatter:
 
    ```markdown
@@ -79,6 +84,24 @@ Loaded at runtime from CDN; no install step:
 
 - Google Fonts: Chakra Petch, Rajdhani, JetBrains Mono
 - [marked](https://github.com/markedjs/marked) v13 — markdown → HTML
+- [mermaid](https://github.com/mermaid-js/mermaid) v11 — diagrams from `mermaid` fenced blocks
+
+## Mermaid diagrams
+
+Fence a block with the `mermaid` language tag in any post:
+
+````markdown
+```mermaid
+graph LR
+  client -->|HTTPS| edge
+  edge -->|/api| origin
+  origin --> db[(postgres)]
+```
+````
+
+The renderer swaps the fenced block for an inline SVG with a magenta
+`// DIAGRAM` chip. Flowchart, sequence, class, state, ER, gantt, and pie
+diagrams are all supported.
 
 ## Layout chrome
 

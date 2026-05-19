@@ -95,6 +95,7 @@ input  { font-family: inherit; color: inherit; background: none; border: none; o
   transition: grid-template-columns 0.22s cubic-bezier(0.5, 0, 0.2, 1);
 }
 .workspace > * { min-width: 0; min-height: 0; height: 100%; overflow: hidden; }
+#reader-mount > .reader, #reader-mount > .reader__empty { height: 100%; }
 
 /* Focus mode: list collapsed, reader takes full panel */
 .app.list-hidden .workspace { grid-template-columns: 0 0 1fr; }
@@ -717,7 +718,13 @@ input  { font-family: inherit; color: inherit; background: none; border: none; o
   background: linear-gradient(to right, var(--line-strong), transparent);
 }
 
-.reader__body { max-width: 68ch; }
+.reader__body { max-width: none; }
+.reader__body > p,
+.reader__body > h3,
+.reader__body > h4,
+.reader__body > ul,
+.reader__body > ol,
+.reader__body > blockquote { max-width: 68ch; }
 .reader__body h3 {
   font-family: var(--f-display);
   font-weight: 600;
@@ -762,6 +769,78 @@ input  { font-family: inherit; color: inherit; background: none; border: none; o
   line-height: 1.6;
   letter-spacing: 0.01em;
 }
+
+.reader__body .mermaid {
+  margin: 26px 0;
+  padding: 32px 24px 24px;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--magenta);
+  text-align: center;
+  overflow-x: auto;
+  position: relative;
+  min-height: 120px;
+  width: 100%;
+  max-width: 100%;
+}
+.reader__body .mermaid::before {
+  content: "// DIAGRAM";
+  position: absolute;
+  top: -1px; right: -1px;
+  background: var(--magenta);
+  color: #000;
+  font-family: var(--f-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 2px 6px;
+}
+.reader__body .mermaid svg {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+}
+.reader__body .mermaid .nodeLabel,
+.reader__body .mermaid .edgeLabel,
+.reader__body .mermaid .messageText,
+.reader__body .mermaid .actor,
+.reader__body .mermaid .loopText,
+.reader__body .mermaid .noteText,
+.reader__body .mermaid text,
+.reader__body .mermaid foreignObject div,
+.reader__body .mermaid foreignObject span,
+.reader__body .mermaid foreignObject p {
+  font-family: var(--f-display) !important;
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+  fill: var(--text) !important;
+  line-height: 1.35 !important;
+}
+.reader__body .mermaid .edgeLabel,
+.reader__body .mermaid .edgeLabel foreignObject div,
+.reader__body .mermaid .edgeLabel foreignObject span {
+  font-size: 16px !important;
+  background: var(--bg-panel) !important;
+  padding: 2px 6px !important;
+}
+.reader__body .mermaid .node rect,
+.reader__body .mermaid .node circle,
+.reader__body .mermaid .node ellipse,
+.reader__body .mermaid .node polygon,
+.reader__body .mermaid .node path {
+  stroke-width: 2px !important;
+}
+.reader__body .mermaid .edgePath .path,
+.reader__body .mermaid .flowchart-link {
+  stroke-width: 2px !important;
+}
+.reader__body .mermaid .arrowheadPath {
+  stroke-width: 1.5px !important;
+}
+.reader__body .mermaid[data-processed="true"] { background: var(--bg-panel-2); }
 
 .reader__foot {
   display: flex;

@@ -66,6 +66,9 @@
       console.error("Failed to load posts/index.json", e);
     }
 
+    configureMarkdown();
+    configureMermaid();
+
     applyShellClasses();
     applyListWidth();
     bindEvents();
@@ -245,13 +248,20 @@
 
   function setFilter(key) {
     state.filter = key;
-    // Nav-filter click exits focus mode so user sees the new list.
+    // Nav-filter click exits focus mode and closes any open post so the
+    // freshly filtered list is visible (on mobile the reader otherwise
+    // stays on top of the list).
     state.listHidden = false;
+    state.active = null;
     if (state.menuOpen) state.menuOpen = false;
     applyShellClasses();
     renderNav();
     renderList();
+    renderReader();
     renderTopbar();
+    if (location.hash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
   }
 
   async function setActive(post, opts = {}) {
@@ -394,7 +404,9 @@
     }
     const post = state.active;
     const bodyHtml = await loadBody(post);
-    mount.appendChild(readerArticle(post, bodyHtml));
+    const art = readerArticle(post, bodyHtml);
+    mount.appendChild(art);
+    renderMermaidIn(art);
   }
 
   function emptyReader() {
@@ -470,6 +482,80 @@
     runDecrypt(titleText, post.title);
 
     return art;
+  }
+
+  // ============ Markdown / Mermaid setup ============
+
+  function configureMarkdown() {
+    if (!window.marked || !window.marked.use) return;
+    const mermaidExt = {
+      name: "mermaid",
+      level: "block",
+      start(src) {
+        const m = src.match(/^```mermaid\b/m);
+        return m ? m.index : undefined;
+      },
+      tokenizer(src) {
+        const m = src.match(/^```mermaid[^\n]*\n([\s\S]*?)\n```\s*(?:\n|$)/);
+        if (!m) return;
+        return { type: "mermaid", raw: m[0], text: m[1] };
+      },
+      renderer(token) {
+        return '<div class="mermaid">' + token.text + "</div>\n";
+      },
+    };
+    window.marked.use({ extensions: [mermaidExt] });
+  }
+
+  function configureMermaid() {
+    if (!window.mermaid) return;
+    window.mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      fontFamily: '"Chakra Petch", system-ui, sans-serif',
+      flowchart:    { useMaxWidth: true, htmlLabels: true, curve: "basis", nodeSpacing: 70, rankSpacing: 90, padding: 18 },
+      sequence:     { useMaxWidth: true, actorMargin: 80, messageFontSize: 18, noteFontSize: 17, actorFontSize: 18, boxMargin: 14 },
+      class:        { useMaxWidth: true },
+      state:        { useMaxWidth: true },
+      er:           { useMaxWidth: true, fontSize: 18 },
+      gantt:        { useMaxWidth: true, fontSize: 16 },
+      pie:          { useMaxWidth: true, textPosition: 0.7 },
+      themeVariables: {
+        fontSize: "20px",
+        labelFontSize: "20px",
+        nodeTextSize: "20px",
+        background: "#0b0b0c",
+        primaryColor: "#101012",
+        primaryTextColor: "#ececec",
+        primaryBorderColor: "#fcee0a",
+        secondaryColor: "#14140e",
+        secondaryBorderColor: "#2e2e33",
+        tertiaryColor: "#0b0b0c",
+        tertiaryBorderColor: "#2e2e33",
+        lineColor: "#9a9a9a",
+        textColor: "#ececec",
+        mainBkg: "#101012",
+        nodeBorder: "#fcee0a",
+        clusterBkg: "#0b0b0c",
+        clusterBorder: "#2e2e33",
+        edgeLabelBackground: "#0b0b0c",
+        noteBkgColor: "#14140e",
+        noteTextColor: "#ececec",
+        noteBorderColor: "#fcee0a",
+      },
+    });
+  }
+
+  async function renderMermaidIn(root) {
+    if (!window.mermaid || !root) return;
+    const nodes = root.querySelectorAll(".mermaid:not([data-processed='true'])");
+    if (!nodes.length) return;
+    try {
+      await window.mermaid.run({ nodes });
+    } catch (e) {
+      console.error("mermaid render failed", e);
+    }
   }
 
   // ============ Body loading + markdown ============
